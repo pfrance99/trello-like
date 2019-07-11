@@ -1,0 +1,18 @@
+{% block nav %}
+
+<div id="header">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+    <a class="navbar-brand" href="#">Trello</a>
+    <span class="navbar-text text-right">
+      {% if username == '' %}
+        <a href="/users/login">Connexion</a>
+        <a href="/users/register" class="right-item">Inscription</a>
+      {% else %}
+        {{ username }}
+        <a href="/users/logout" class="right-item">Déconnexion</a>
+      {% endif %}
+    </span>
+  </nav>
+</div>
+
+{% endblock %}

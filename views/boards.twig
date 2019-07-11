@@ -1,0 +1,115 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+  <div class="content-index">
+    <div class="row col-xs-8 col-sm-8 col-md-8 col-lg-8" id="content">
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css"></link>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/fr.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
+
+  <script type="text/javascript">
+
+    function getAndDisplayBoards() {
+      fetch('/boards', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+        })
+        .then(res => res.json())
+        .then(data => {
+            renderBoards(data.result);
+        })
+    }
+
+    function showAddPopup() {
+      Swal.fire({
+        title: 'Créer un tableau',
+        input: 'text',
+        // inputValue: '',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Vous ne pouvez pas créer un tableau sans titre !'
+          }
+        }
+      }).then(function(response) {
+        console.log(response);
+          if(response.value) {
+            addBoard(response.value);
+          }
+        });
+    }
+
+    function addBoard(name) {
+      fetch('/board', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ name: name })
+        })
+        .then(function(data) {
+          refreshBoards();
+        })
+    }
+
+    function refreshBoards() {
+       document.getElementById('content').innerHTML = '';
+       getAndDisplayBoards();
+    }
+
+    function deleteBoard(e) {
+      // C'est içi que se situe l'id (sur la div parente)
+      var boardId = e.path[1].id;
+      fetch('/board/' + boardId , {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+        })
+        .then(function(data) {
+          refreshBoards();
+        })
+    }
+
+    function goToBoard(e) {
+      window.location.replace('/board/' + e.path[2].id);
+    }
+
+    function renderBoards(boards) {
+      var parent = document.getElementById('content');
+      for (var i = 0; i < boards.length; i++) {
+        var div = document.createElement('div');
+        div.innerHTML = '<div class="card card-board" id="' + boards[i]._id +'" >' +
+                        '<i class="fa fa-times" aria-hidden="true" onclick="deleteBoard(event)"></i>' +
+                        '<div class="card-body"><a onclick="goToBoard(event)">' + boards[i].name + '</a></div>' +
+                        '</div>';
+        div.setAttribute('class', 'col-xs-12 col-sm-6 col-md-4 col-lg-3');
+
+        parent.appendChild(div);
+      }
+      // On ajoute à la fin de la liste la card pour ajouter une card
+      var div = document.createElement('div');
+      div.innerHTML = '<div class="card card-board add-card" onclick="showAddPopup()">' +
+                      '<div class="card-body"><i class="fa fa-plus" aria-hidden="true"></i> </div>' +
+                      '</div>';
+      div.setAttribute('class', 'col-xs-12 col-sm-6 col-md-4 col-lg-3');
+      parent.appendChild(div);
+    }
+
+    refreshBoards();
+
+  </script>
+
+
+
+{% endblock %}

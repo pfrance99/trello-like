@@ -1,0 +1,57 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+  <div class="content-auth">
+    <form name="registerForm" id="registerForm">
+      <div class="form-row">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="form-row">
+        <label for="email">Adresse email</label>
+        <input type="email" class="form-control" name="email" id="email" required />
+        <small class="form-text text-muted">Votre adresse email restera confidentielle.</small>
+      </div>
+      <div class="form-row">
+        <label for="username">Nom d'utilisateur</label>
+        <input type="text" class="form-control" name="username" id="username"  required />
+      </div>
+      <div class="form-row">
+        <label for="password">Mot de passe</label>
+        <input type="password" class="form-control" name="password" id="password"  required />
+      </div>
+
+      <div class="form-row">
+        <button type="submit" class="btn btn-dark">S'enregistrer</button>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  <script type="text/javascript">
+    document.getElementById('registerForm').onsubmit = submitted;
+
+    function submitted(e) {
+      //To prevent form tu submit
+      e.preventDefault();
+
+      fetch('/users/register',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ email: document.registerForm.email.value, username: document.registerForm.username.value, password: document.registerForm.password.value })
+      })
+      .then(function(res){
+        if (res.ok) {
+          window.location.replace(res.url);
+        } else {
+          document.getElementById('password').value = '';
+        }
+      })
+    }
+
+  </script>
+{% endblock %}

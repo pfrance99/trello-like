@@ -1,0 +1,111 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+  <div class="content-index">
+    <div class="row col-xs-8 col-sm-8 col-md-8 col-lg-8" id="content">
+      <div class="column"></div>
+      <div class="column"></div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css"></link>
+{% endblock %}
+
+{% block javascripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
+
+  <script type="text/javascript">
+
+    function getAndDisplayTasks() {
+      fetch('/tasks/5d2742cc59ee5f2794cb24b5', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data.result);
+          debugger;
+          // renderTasks(data.result);
+        })
+    }
+
+    function showAddPopup() {
+      Swal.fire({
+        title: 'Créer un tableau',
+        input: 'text',
+        // inputValue: '',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Vous ne pouvez pas créer un tableau sans titre !'
+          }
+        }
+      }).then(function(response) {
+        console.log(response);
+          if(response.value) {
+            addBoard(response.value);
+          }
+        });
+    }
+
+    function addBoard(name) {
+      fetch('/board', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ name: name })
+        })
+        .then(function(data) {
+          refreshBoards();
+        })
+    }
+
+    function refreshTasks() {
+       document.getElementById('content').innerHTML = '';
+       getAndDisplayTasks();
+    }
+
+    function deleteBoard(e) {
+      var boardId = e.target.id;
+      fetch('/board/' + boardId , {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+        })
+        .then(function(data) {
+          refreshBoards();
+        })
+    }
+
+    function renderBoards(boards) {
+      var parent = document.getElementById('content');
+      for (var i = 0; i < boards.length; i++) {
+        var div = document.createElement('div');
+        div.innerHTML = '<div class="card card-board">' +
+                        '<i class="fa fa-times" aria-hidden="true" id="' + boards[i]._id +'" onclick="deleteBoard(event)"></i>' +
+                        '<div class="card-body">' + boards[i].name + '</div>' +
+                        '</div>';
+        div.setAttribute('class', 'col-xs-12 col-sm-6 col-md-4 col-lg-3');
+        parent.appendChild(div);
+      }
+      // On ajoute à la fin de la liste la card pour ajouter une card
+      var div = document.createElement('div');
+      div.innerHTML = '<div class="card card-board add-card" onclick="showAddPopup()">' +
+                      '<div class="card-body"><i class="fa fa-plus" aria-hidden="true"></i> </div>' +
+                      '</div>';
+      div.setAttribute('class', 'col-xs-12 col-sm-6 col-md-4 col-lg-3');
+      parent.appendChild(div);
+    }
+
+    refreshTasks();
+
+  </script>
+
+
+
+{% endblock %}

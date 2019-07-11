@@ -1,0 +1,61 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+
+
+  <div class="content-auth">
+    <form name="loginForm" id="loginForm">
+      <div class="form-row">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="form-row">
+        <label for="login" placeholder="Email">Nom d'utilisateur ou email</label>
+        <input type="text" class="form-control" name="login" id="login" required />
+      </div>
+      <div class="form-row">
+        <label for="password">Mot de passe</label>
+        <input type="password" class="form-control" name="password" id="password" required />
+      </div>
+
+      <div id="error" class="form-row">
+        <p class="text-muted">Mauvais nom d'utilisateur ou mot de passe</p>
+      </div>
+
+      <div class="form-row">
+        <button type="submit" class="btn btn-dark">Se connecter</button>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  <script type="text/javascript">
+    document.getElementById('error').style.display = 'none';
+    document.getElementById('loginForm').onsubmit = submitted;
+
+    function submitted(e) {
+      document.getElementById('error').style.display = 'none';
+      //To prevent form tu submit
+      e.preventDefault();
+
+      fetch('/users/login',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ login: document.loginForm.login.value, password: document.loginForm.password.value })
+      })
+      .then(function(res){
+        console.log('res');
+        if (res.ok) {
+          window.location.replace('/');
+        } else {
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('password').value = '';
+        }
+      })
+    }
+
+  </script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{
+  "name": "twitter",
+  "version": "0.0.0",
+  "private": true,
+  "main": "app.js",
+  "binary.module_name": "",
+  "binary": {
+    "module_name": "",
+    "module_path": "",
+    "host": ""
+  },
+  "scripts": {
+    "start": "nodemon -L node ./bin/www",
+    "dev": "nodemon -L DEBUG=twitter:* ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-session": "^1.16.2",
+    "http-errors": "~1.6.3",
+    "less-middleware": "~2.2.1",
+    "mongoose": "^5.6.3",
+    "morgan": "~1.9.1",
+    "twig": "~0.10.3"
+  }
+}

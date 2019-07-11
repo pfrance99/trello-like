@@ -1,0 +1,127 @@
+@white: white;
+@background-body: #e6ecf0;
+
+html {
+  width: 100%;
+  height: 100%;
+  background: url("../images/wallpaper1.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  body {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    h1 {
+      margin: 0;
+    }
+
+    #header {
+      height: 6vh;
+
+      nav {
+        height: 6vh;
+        background-color: rgba(95, 95, 95, 0.6)!important;
+        z-index: 1;
+
+        .text-right {
+          right: 16px;
+          position: absolute;
+
+          .right-item {
+            margin-left: 10px;
+          }
+        }
+
+        span {
+          color: @white;
+        }
+
+        a {
+          color: @white;
+        }
+      }
+    }
+
+    .content-auth {
+      width: 100%;
+      height: 94vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      form {
+        background-color: @white;
+        padding: 30px;
+        width: 400px;
+
+        h1 {
+          text-align: center;
+          width: 100%;
+        }
+
+        .form-row {
+          margin-bottom: 30px;
+
+          p {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .content-index {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .row {
+        margin-top: 52px;
+
+        .card-board {
+          width: 100%;
+          margin: 10px;
+          background-color: white;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background-color: rgba(236, 236, 236, 0.9);
+            transition: all 0.2s ease;
+          }
+
+          a {
+            cursor: pointer;
+          }
+
+          .fa-times {
+            position: absolute;
+            right: 5px;
+            cursor: pointer;
+          }
+        }
+
+        .add-card {
+          width: 50px;
+          background-color: rgba(95,95,95,0.6) !important;
+          color: white;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background-color: rgba(76, 76, 76, 0.6);
+            transition: all 0.2s ease;
+          }
+        }
+      }
+    }
+  }
+}
+
+a {
+  color: @white;
+}
