@@ -28,44 +28,13 @@
         })
         .then(res => res.json())
         .then(data => {
-          console.log(data.result);
-          debugger;
+          // TODO générer les taches dans le dom
           // renderTasks(data.result);
         })
     }
 
-    function showAddPopup() {
-      Swal.fire({
-        title: 'Créer un tableau',
-        input: 'text',
-        // inputValue: '',
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return 'Vous ne pouvez pas créer un tableau sans titre !'
-          }
-        }
-      }).then(function(response) {
-        console.log(response);
-          if(response.value) {
-            addBoard(response.value);
-          }
-        });
-    }
-
-    function addBoard(name) {
-      fetch('/board', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'same-origin',
-          body: JSON.stringify({ name: name })
-        })
-        .then(function(data) {
-          refreshBoards();
-        })
-    }
-
     function refreshTasks() {
+      console.log('YO');
        document.getElementById('content').innerHTML = '';
        getAndDisplayTasks();
     }
@@ -82,25 +51,6 @@
         })
     }
 
-    function renderBoards(boards) {
-      var parent = document.getElementById('content');
-      for (var i = 0; i < boards.length; i++) {
-        var div = document.createElement('div');
-        div.innerHTML = '<div class="card card-board">' +
-                        '<i class="fa fa-times" aria-hidden="true" id="' + boards[i]._id +'" onclick="deleteBoard(event)"></i>' +
-                        '<div class="card-body">' + boards[i].name + '</div>' +
-                        '</div>';
-        div.setAttribute('class', 'col-xs-12 col-sm-6 col-md-4 col-lg-3');
-        parent.appendChild(div);
-      }
-      // On ajoute à la fin de la liste la card pour ajouter une card
-      var div = document.createElement('div');
-      div.innerHTML = '<div class="card card-board add-card" onclick="showAddPopup()">' +
-                      '<div class="card-body"><i class="fa fa-plus" aria-hidden="true"></i> </div>' +
-                      '</div>';
-      div.setAttribute('class', 'col-xs-12 col-sm-6 col-md-4 col-lg-3');
-      parent.appendChild(div);
-    }
 
     refreshTasks();
 
